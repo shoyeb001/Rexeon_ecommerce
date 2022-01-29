@@ -12,6 +12,7 @@ use App\Models\MultiImg;
 use Carbon\Carbon;
 use Image;
 use Illuminate\Http\Request;
+use Haruncpi\LaravelIdGenerator\IdGenerator;
 
 class ProductController extends Controller
 {
@@ -35,7 +36,7 @@ class ProductController extends Controller
             'subcategory_id' => "required",
             'product_name' => "required",
             'product_qty' => "required",
-            'purchase_price'=>"required",
+            'purchase_price' => "required",
             'selling_price' => "required",
             'short_descp' => "required",
             'long_descp' => "required",
@@ -47,6 +48,9 @@ class ProductController extends Controller
         $name_gen = uniqid() . '.' . $image->getClientOriginalExtension();
         Image::make($image)->resize(917, 1000)->save('upload/products/thambnail/' . $name_gen);
         $save_url = 'upload/products/thambnail/' . $name_gen;
+        $product_code = IdGenerator::generate(['table' => 'products', 'length' => 6, 'prefix' => date('y')]);
+
+
 
         $product_id = Product::insertGetId([
             'brand_id' => $request->brand_id,
@@ -55,7 +59,7 @@ class ProductController extends Controller
             'subsubcategory_id' => $request->subsubcategory_id,
             'product_name' => $request->product_name,
             'product_slug' =>  strtolower(str_replace(' ', '-', $request->product_name)),
-            'product_code' => $request->product_code,
+            'product_code' => $product_code,
 
             'product_qty' => $request->product_qty,
             'product_tags' => $request->product_tags,
@@ -78,7 +82,6 @@ class ProductController extends Controller
             'created_at' => Carbon::now(),
 
         ]);
-
 
         ////////// Multiple Image Upload Start ///////////
 
@@ -118,10 +121,33 @@ class ProductController extends Controller
         $products = Product::findOrFail($id);
         return view('backend.product.product_edit', compact('categories', 'brands', 'subcategory', 'subsubcategory', 'products', 'multiImgs'));
     }
- 
+
     public function UpdateProduct(Request $request)
     {
         $product_id = $request->id;
+        $product_code = IdGenerator::generate(['table' => 'products', 'field' => 'id', 'length' => 3, 'prefix' =>  2]);
+
+
+        function IDGenerator($model, $trow, $length = 4, $prefix)
+        {
+            $data = $model::orderBy('id', 'desc')->first();
+            if (!$data) {
+                $og_length = $length;
+                $last_number = '';
+            } else {
+                $code = substr($data->$trow, strlen($prefix) + 1);
+                $actial_last_number = ($code / 1) * 1;
+                $increment_last_number = ((int)$actial_last_number) + 1;
+                $last_number_length = strlen($increment_last_number);
+                $og_length = $length - $last_number_length;
+                $last_number = $increment_last_number;
+            }
+            $zeros = "";
+            for ($i = 0; $i < $og_length; $i++) {
+                $zeros .= "0";
+            }
+            return $prefix . '-' . $zeros . $last_number;
+        }
 
         Product::findOrFail($product_id)->update([
             'brand_id' => $request->brand_id,
@@ -130,14 +156,14 @@ class ProductController extends Controller
             'subsubcategory_id' => $request->subsubcategory_id,
             'product_name' => $request->product_name,
             'product_slug' =>  strtolower(str_replace(' ', '-', $request->product_name)),
-            'product_code' => $request->product_code,
+            'product_code' => IDGenerator(new Product, 'id', 15, 3),
 
             'product_qty' => $request->product_qty,
             'product_tags' => $request->product_tags,
             'product_size' => $request->product_size,
             'product_color' => $request->product_color,
 
-            'purchase_price'=>$request->purchase_price,
+            'purchase_price' => $request->purchase_price,
             'selling_price' => $request->selling_price,
             'discount_price' => $request->discount_price,
             'short_descp' => $request->short_descp,
@@ -269,8 +295,9 @@ class ProductController extends Controller
         return redirect()->back()->with($notification);
     }
 
-    public function StockProduct(){
+    public function StockProduct()
+    {
         $products = Product::latest()->get();
-        return view('backend.product.product_stock',compact('products'));
+        return view('backend.product.product_stock', compact('products'));
     }
 }
