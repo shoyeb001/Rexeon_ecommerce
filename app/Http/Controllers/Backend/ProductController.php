@@ -127,7 +127,6 @@ class ProductController extends Controller
         $product_id = $request->id;
         $product_code = IdGenerator::generate(['table' => 'products', 'field' => 'id', 'length' => 3, 'prefix' =>  2]);
 
-
         function IDGenerator($model, $trow, $length = 4, $prefix)
         {
             $data = $model::orderBy('id', 'desc')->first();
