@@ -52,7 +52,7 @@ Route::post("admin/auth", [AdminController::class, 'AdminLogin'])->name("admin.l
 
 Route::group(['middleware' => ['adminauth']], function () {       //admin routes
 
-    Route::get('/admin/logout',[AdminController::class,'logout'])->name('admin.logout');
+    Route::get('/admin/logout', [AdminController::class, 'logout'])->name('admin.logout');
 
 
     Route::get("/admin/dashboard", [AdminProfileController::class, 'AdminDashboard'])->name('admin.dashboard');
@@ -61,11 +61,11 @@ Route::group(['middleware' => ['adminauth']], function () {       //admin routes
 
     Route::get('/admin/profile/edit', [AdminProfileController::class, 'AdminProfileEdit'])->name('admin.profile.edit');
 
-    Route::post('/admin/profile/update',[AdminProfileController::class,'AdminProfileUpdate'])->name("admin.profile.update");
+    Route::post('/admin/profile/update', [AdminProfileController::class, 'AdminProfileUpdate'])->name("admin.profile.update");
 
     Route::get('/admin/change/password', [AdminProfileController::class, 'AdminChangePassword'])->name('admin.change.password');
 
-    Route::post("admin/password/update",[AdminProfileController::class,'UpdatePassword'])->name("admin.password.update");
+    Route::post("admin/password/update", [AdminProfileController::class, 'UpdatePassword'])->name("admin.password.update");
 
 
 
@@ -162,6 +162,8 @@ Route::group(['middleware' => ['adminauth']], function () {       //admin routes
 
     Route::get('/product/active/{id}', [ProductController::class, 'ProductActive'])->name('product.active');
 
+    Route::get('/product/scan', [ProductController::class, 'ScanProduct'])->name("edit.scan");
+
     //stock product
 
     Route::get("/stock/product", [ProductController::class, 'StockProduct'])->name("stock.product");
@@ -178,21 +180,21 @@ Route::group(['middleware' => ['adminauth']], function () {       //admin routes
 
     //admin orders route
 
-    Route::get("/orders/pending/orders",[OrderController::class,'PendingOrder'])->name("pending.order");
+    Route::get("/orders/pending/orders", [OrderController::class, 'PendingOrder'])->name("pending.order");
 
-    Route::get('orders/pending/orders/details/{id}',[OrderController::class,'PendingOrderDetails'])->name('pending.order.details');
+    Route::get('orders/pending/orders/details/{id}', [OrderController::class, 'PendingOrderDetails'])->name('pending.order.details');
 
     Route::get('orders/pending/confirm/{order_id}', [OrderController::class, 'PendingToConfirm'])->name('pending.confirm');
 
-    Route::get('/orders/processing/confirm/{order_id}',[OrderController::class,'ConfirmToProcessing'])->name("confirm.processing");
+    Route::get('/orders/processing/confirm/{order_id}', [OrderController::class, 'ConfirmToProcessing'])->name("confirm.processing");
 
-    Route::get('/orders/processing/picked/{order_id}',[OrderController::class,'ProcessingToPicked'])->name("processing.picked");
+    Route::get('/orders/processing/picked/{order_id}', [OrderController::class, 'ProcessingToPicked'])->name("processing.picked");
 
-    Route::get('/orders/processing/shipped/{order_id}',[OrderController::class,'PickedToShipped'])->name('picked.shipped');
+    Route::get('/orders/processing/shipped/{order_id}', [OrderController::class, 'PickedToShipped'])->name('picked.shipped');
 
-    Route::get('/orders/shipped/delivered/{order_id}',[OrderController::class,'ShippedToDelivered'])->name("shipped.delivered");
+    Route::get('/orders/shipped/delivered/{order_id}', [OrderController::class, 'ShippedToDelivered'])->name("shipped.delivered");
 
-    Route::get('/orders/confirmed/orders',[OrderController::class,'ConfirmedOrder'])->name("confirmed.order");
+    Route::get('/orders/confirmed/orders', [OrderController::class, 'ConfirmedOrder'])->name("confirmed.order");
 
     Route::get('orders/processing/orders', [OrderController::class, 'ProcessingOrders'])->name('processing.orders');
 
@@ -208,53 +210,52 @@ Route::group(['middleware' => ['adminauth']], function () {       //admin routes
 
     //admin user roles routes
 
-    Route::get('adminuserrole/all',[AdminUserController::class,'AllAdminRole'])->name("all.admin.user");
+    Route::get('adminuserrole/all', [AdminUserController::class, 'AllAdminRole'])->name("all.admin.user");
 
-    Route::get("adminuserrole/add",[AdminUserController::class,'AddAdminRole'])->name("add.admin.user");
+    Route::get("adminuserrole/add", [AdminUserController::class, 'AddAdminRole'])->name("add.admin.user");
 
-    Route::post("adminuserrole/store",[AdminUserController::class,'StoreAdminRole'])->name("store.admin.user");
+    Route::post("adminuserrole/store", [AdminUserController::class, 'StoreAdminRole'])->name("store.admin.user");
 
-    Route::get("adminuserrole/edit/{id}",[AdminUserController::class,'EditAdminRole'])->name("edit.admin.user");
+    Route::get("adminuserrole/edit/{id}", [AdminUserController::class, 'EditAdminRole'])->name("edit.admin.user");
 
-    Route::post("adminuserrole/update",[AdminUserController::class,'UpdateAdminRole'])->name("update.admin.user");
+    Route::post("adminuserrole/update", [AdminUserController::class, 'UpdateAdminRole'])->name("update.admin.user");
 
-    Route::get("adminuserrole/delete/{id}",[AdminUserController::class,'DeleteAdminRole'])->name("delete.role");
+    Route::get("adminuserrole/delete/{id}", [AdminUserController::class, 'DeleteAdminRole'])->name("delete.role");
 
 
     //admin return 
 
-    Route::get("return/admin/request",[ReturnController::class,'ReturnRequest'])->name("return.request");
+    Route::get("return/admin/request", [ReturnController::class, 'ReturnRequest'])->name("return.request");
 
-    Route::get("return/admin/approve/{order_id}",[ReturnController::class,'ReturnApprove'])->name("return.approve");
+    Route::get("return/admin/approve/{order_id}", [ReturnController::class, 'ReturnApprove'])->name("return.approve");
 
-    Route::get("return/admin/all/request",[ReturnController::class,'ReturnAll'])->name("return.all");
+    Route::get("return/admin/all/request", [ReturnController::class, 'ReturnAll'])->name("return.all");
 
-   //admin get all users
+    //admin get all users
 
-   Route::get("alluser/view",[AdminProfileController::class,'GetAllUsers'])->name("get.all.users");
+    Route::get("alluser/view", [AdminProfileController::class, 'GetAllUsers'])->name("get.all.users");
 
-   //refers
+    //refers
 
-   Route::get("refers/view",[AdminRefer::class,'ViewRefers'])->name("view.refers");
+    Route::get("refers/view", [AdminRefer::class, 'ViewRefers'])->name("view.refers");
 
-   Route::get("refers/due/payments",[AdminRefer::class,'ViewDuePayment'])->name("view.due.payment");
+    Route::get("refers/due/payments", [AdminRefer::class, 'ViewDuePayment'])->name("view.due.payment");
 
-   Route::get("refers/due/payment/details/{user_id}",[AdminRefer::class,'ViewPaymentDetails'])->name("refers.view.details");
+    Route::get("refers/due/payment/details/{user_id}", [AdminRefer::class, 'ViewPaymentDetails'])->name("refers.view.details");
 
-   Route::get("refers/payment/complete/{refer_id}",[AdminRefer::class,'CompletePayment'])->name("refer.payment.complete");
+    Route::get("refers/payment/complete/{refer_id}", [AdminRefer::class, 'CompletePayment'])->name("refer.payment.complete");
 
-   //pickup centers
-   
-   Route::get("pickup-center/view",[Pickupcenter::class,'ViewPickUpCenter'])->name("pickupcenter.view");
- 
-   Route::post("pickup-center/add",[Pickupcenter::class,'AddPickUpCenter'])->name("pickupcenter.add");
+    //pickup centers
 
-   Route::get("pickup-center/edit/{id}",[Pickupcenter::class,'EditPickUpCenter'])->name("pickupcenter.edit");
+    Route::get("pickup-center/view", [Pickupcenter::class, 'ViewPickUpCenter'])->name("pickupcenter.view");
 
-   Route::post("pickup-center/update",[Pickupcenter::class,'UpdatePickUpCenter'])->name("pickupcenter.update");
+    Route::post("pickup-center/add", [Pickupcenter::class, 'AddPickUpCenter'])->name("pickupcenter.add");
 
-   Route::get("pickup-center/delete/{id}",[Pickupcenter::class,'DeletePickUpCenter'])->name("pickupcenter.delete");
-    
+    Route::get("pickup-center/edit/{id}", [Pickupcenter::class, 'EditPickUpCenter'])->name("pickupcenter.edit");
+
+    Route::post("pickup-center/update", [Pickupcenter::class, 'UpdatePickUpCenter'])->name("pickupcenter.update");
+
+    Route::get("pickup-center/delete/{id}", [Pickupcenter::class, 'DeletePickUpCenter'])->name("pickupcenter.delete");
 }); //guard ends
 
 
@@ -269,7 +270,7 @@ Route::get('/login', function () {
     return view('auth.login');
 })->name('auth.login');
 
-Route::get("user/logout",[UserAuthController::class,"UserLogOut"])->name("user.logout");
+Route::get("user/logout", [UserAuthController::class, "UserLogOut"])->name("user.logout");
 
 Route::get('/forgot-password', function () {
     return view('auth.forgot_password');
@@ -283,9 +284,9 @@ Route::post("/user/login/auth", [UserAuthController::class, "UserLoginAuth"])->n
 
 Route::get("/user/logout", [UserAuthController::class, "UserLogout"])->name("user.logout");
 
-Route::get("/user/forgot-password",[UserAuthController::class,"UserForgotPassword"])->name("user.forgot.password");
+Route::get("/user/forgot-password", [UserAuthController::class, "UserForgotPassword"])->name("user.forgot.password");
 
-Route::post("/user/email/password/reset",[UserAuthController::class,"MailResetPassword"])->name("password.email");
+Route::post("/user/email/password/reset", [UserAuthController::class, "MailResetPassword"])->name("password.email");
 
 
 //product routes
@@ -350,68 +351,66 @@ Route::group(['middleware' => ['userauth']], function () {
 
     //user profile routes
 
-    Route::get('user/profile',[IndexController::class,'GetUserProfile'])->name("user.profile");
+    Route::get('user/profile', [IndexController::class, 'GetUserProfile'])->name("user.profile");
 
-    Route::post('user/profile/store',[IndexController::class,'UserProfileStore'])->name("user.profile.store");
+    Route::post('user/profile/store', [IndexController::class, 'UserProfileStore'])->name("user.profile.store");
 
-    Route::get("/user/dashboard",function(){ return view("dashboard");})->name("dashboard");
+    Route::get("/user/dashboard", function () {
+        return view("dashboard");
+    })->name("dashboard");
 
-    Route::get("/user/change-password",[IndexController::class,"ChangePassword"])->name("change.password");
+    Route::get("/user/change-password", [IndexController::class, "ChangePassword"])->name("change.password");
 
-    Route::post("/user/password/update",[IndexController::class,"UpdatePassword"])->name("user.password.update");
+    Route::post("/user/password/update", [IndexController::class, "UpdatePassword"])->name("user.password.update");
 
-   Route::get("/user/myorder",[AllUserController::class,"MyOrder"])->name("user.myorder");
+    Route::get("/user/myorder", [AllUserController::class, "MyOrder"])->name("user.myorder");
 
-   Route::get("/user/order_details/{id}",[AllUserController::class,"OrderDetails"])->name("user.order.details");
+    Route::get("/user/order_details/{id}", [AllUserController::class, "OrderDetails"])->name("user.order.details");
 
-   Route::get("/user/invoice_download/{id}",[AllUserController::class,"InvoiceDownload"]);
+    Route::get("/user/invoice_download/{id}", [AllUserController::class, "InvoiceDownload"]);
 
-   Route::post("/user/return/order/{order_id}",[AllUserController::class,"ReturnOrder"])->name("user.return.order");
+    Route::post("/user/return/order/{order_id}", [AllUserController::class, "ReturnOrder"])->name("user.return.order");
 
-   Route::get('/user/return/order/list', [AllUserController::class, 'ReturnOrderList'])->name('return.order.list');
+    Route::get('/user/return/order/list', [AllUserController::class, 'ReturnOrderList'])->name('return.order.list');
 
 
-   Route::get('/user/cancel/orders',[AllUserController::class,'CancelOrders'])->name("user.cancel.orders");
+    Route::get('/user/cancel/orders', [AllUserController::class, 'CancelOrders'])->name("user.cancel.orders");
 
-   //refer and earn
+    //refer and earn
 
-   Route::get("/refer-earn/register",[Referearn::class,'Register'])->name("refer.earn.register");
+    Route::get("/refer-earn/register", [Referearn::class, 'Register'])->name("refer.earn.register");
 
-   Route::post("/refer-earn/signup",[Referearn::class,'Signup'])->name("refer.signup");
+    Route::post("/refer-earn/signup", [Referearn::class, 'Signup'])->name("refer.signup");
 
-   Route::get("/user/refer/insights",[Referearn::class,'UserInsights'])->name("user.refer.insight");
+    Route::get("/user/refer/insights", [Referearn::class, 'UserInsights'])->name("user.refer.insight");
 
-   Route::get("/user/refer/payment-details",[Referearn::class,'UserPaymentDetails'])->name("user.refer.payment");
+    Route::get("/user/refer/payment-details", [Referearn::class, 'UserPaymentDetails'])->name("user.refer.payment");
 
-   Route::post("user/refer/payment/update",[Referearn::class,'UserPaymentUpdate'])->name("refer.payment.update");
+    Route::post("user/refer/payment/update", [Referearn::class, 'UserPaymentUpdate'])->name("refer.payment.update");
 
-   Route::get("/user/refer/withdraws",[Referearn::class,'UserReferWithdraws'])->name("user.refer.withdraw");
+    Route::get("/user/refer/withdraws", [Referearn::class, 'UserReferWithdraws'])->name("user.refer.withdraw");
 
-   Route::get("/refer/share",[Referearn::class,'ReferShare'])->name("refer.share");
-
+    Route::get("/refer/share", [Referearn::class, 'ReferShare'])->name("refer.share");
 });
 
-   //user order tracking
+//user order tracking
 
-Route::get("/product/details/{id}/refer/{refer_id}",[Referearn::class,'ReferSave']);
+Route::get("/product/details/{id}/refer/{refer_id}", [Referearn::class, 'ReferSave']);
 
-   
-Route::post('/order/tracking', [AllUserController::class, 'OrderTracking'])->name('order.tracking');    
+
+Route::post('/order/tracking', [AllUserController::class, 'OrderTracking'])->name('order.tracking');
 
 
 //shop page
 
-Route::get("/shop",[ShopPageController::class,"ShopPage"])->name("shoppage");
+Route::get("/shop", [ShopPageController::class, "ShopPage"])->name("shoppage");
 
 //search page
 
-Route::post("/search",[IndexController::class,"SearchProduct"])->name("product.search");
+Route::post("/search", [IndexController::class, "SearchProduct"])->name("product.search");
 
 //advance search
 
-Route::post("/search-product",[IndexController::class,"ProductSearch"])->name("search.product");
+Route::post("/search-product", [IndexController::class, "ProductSearch"])->name("search.product");
 
-Route::get("/login/refer/{id}",[UserAuthController::class,"ReferSignup"])->name("refer.register");
-
-
-
+Route::get("/login/refer/{id}", [UserAuthController::class, "ReferSignup"])->name("refer.register");

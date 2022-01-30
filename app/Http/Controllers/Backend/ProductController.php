@@ -48,9 +48,7 @@ class ProductController extends Controller
         $name_gen = uniqid() . '.' . $image->getClientOriginalExtension();
         Image::make($image)->resize(917, 1000)->save('upload/products/thambnail/' . $name_gen);
         $save_url = 'upload/products/thambnail/' . $name_gen;
-        $product_code = IdGenerator::generate(['table' => 'products', 'length' => 6, 'prefix' => date('y')]);
-
-
+        $product_code = IdGenerator::generate(['table' => 'products', 'field' => 'product_code', 'length' => 12, 'prefix' => 2]);
 
         $product_id = Product::insertGetId([
             'brand_id' => $request->brand_id,
@@ -125,28 +123,7 @@ class ProductController extends Controller
     public function UpdateProduct(Request $request)
     {
         $product_id = $request->id;
-        $product_code = IdGenerator::generate(['table' => 'products', 'field' => 'id', 'length' => 3, 'prefix' =>  2]);
-
-        function IDGenerator($model, $trow, $length = 4, $prefix)
-        {
-            $data = $model::orderBy('id', 'desc')->first();
-            if (!$data) {
-                $og_length = $length;
-                $last_number = '';
-            } else {
-                $code = substr($data->$trow, strlen($prefix) + 1);
-                $actial_last_number = ($code / 1) * 1;
-                $increment_last_number = ((int)$actial_last_number) + 1;
-                $last_number_length = strlen($increment_last_number);
-                $og_length = $length - $last_number_length;
-                $last_number = $increment_last_number;
-            }
-            $zeros = "";
-            for ($i = 0; $i < $og_length; $i++) {
-                $zeros .= "0";
-            }
-            return $prefix . '-' . $zeros . $last_number;
-        }
+        $product_code = IdGenerator::generate(['table' => 'products', 'field' => 'product_code', 'length' => 12, 'prefix' =>  2]);
 
         Product::findOrFail($product_id)->update([
             'brand_id' => $request->brand_id,
@@ -155,7 +132,7 @@ class ProductController extends Controller
             'subsubcategory_id' => $request->subsubcategory_id,
             'product_name' => $request->product_name,
             'product_slug' =>  strtolower(str_replace(' ', '-', $request->product_name)),
-            'product_code' => IDGenerator(new Product, 'id', 15, 3),
+            'product_code' => $product_code,
 
             'product_qty' => $request->product_qty,
             'product_tags' => $request->product_tags,
@@ -298,5 +275,13 @@ class ProductController extends Controller
     {
         $products = Product::latest()->get();
         return view('backend.product.product_stock', compact('products'));
+    }
+
+    // product scan
+    public function ScanProduct()
+    {
+        // $product_id = $request->id;
+        // $product_code = IdGenerator::generate(['table' => 'products', 'field' => 'product_code', 'length' => 12, 'prefix' =>  2]);
+        // return view('backend.product.product_scanner', compact('categories', 'brands'));
     }
 }
