@@ -98,6 +98,7 @@
      case 'success':
      toastr.success(" {{ Session::get('message') }} ");
      break;
+     
  
      case 'warning':
      toastr.warning(" {{ Session::get('message') }} ");
